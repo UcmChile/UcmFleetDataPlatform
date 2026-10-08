@@ -1,0 +1,24 @@
+{
+  "name": "ucm-fleet-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "db:migrate": "node src/scripts/migrate.js",
+    "db:create": "node src/scripts/create-database.js",
+    "wisetrack:backfill": "node src/scripts/backfill-pings-day-by-day.js",
+    "traumasoft:sync-org": "node src/scripts/sync-traumasoft-organization.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.2.0",
+    "mssql": "^11.0.1",
+    "mysql2": "^3.14.1"
+  }
+}

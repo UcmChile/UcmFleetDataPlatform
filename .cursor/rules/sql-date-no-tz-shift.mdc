@@ -1,0 +1,55 @@
+---
+description: Fechas DATE/calendario sin corrimiento de zona horaria (Chile)
+globs: "**/*.{js,jsx,ts,tsx}"
+alwaysApply: true
+---
+
+# Fechas SQL / calendario — sin corrimiento TZ
+
+En Chile (UTC−3/−4), un `DATE` de SQL Server llega al driver JS como medianoche **UTC**. Formatear con `getDate()` / `toLocaleDateString()` **resta un día**.
+
+Aplica a **todo mantenedor, dashboard, consolidación, bitácora o proceso nuevo** que use fechas de calendario (`reading_date`, día de ping, etc.).
+
+## Backend (API / SQL)
+
+- Campos `type: 'date'` en entidades: seleccionar con  
+  `CONVERT(varchar(10), col, 23) AS col` y/o normalizar en `mapRow` a `YYYY-MM-DD`.
+- Agrupaciones/filtros por día Chile: preferir `varchar(10)` o rangos sargables  
+  `ts >= 'YYYY-MM-DDT00:00:00-04:00' AND ts < nextDay`, no devolver `DATE` crudo al cliente.
+- “Hoy / ayer” de negocio: zona `America/Santiago` (p. ej. `Intl` `en-CA`), no `toISOString().slice(0,10)` ni `getDate()` del server.
+
+```js
+// ❌ BAD — DATE → Date UTC → JSON ISO midnight
+out.reading_date = row.reading_date
+
+// ✅ GOOD
+out.reading_date = toDateOnlyString(row.reading_date) // "2026-07-21"
+// o SELECT CONVERT(varchar(10), reading_date, 23)
+```
+
+## Frontend (grillas / formularios)
+
+- `formatDate` para valores solo-fecha (`YYYY-MM-DD` o `T00:00:00Z`): usar los dígitos del string (DD-MM-YYYY), **sin** `getDate()` local.
+- Inputs `type="date"`: value siempre `YYYY-MM-DD` string.
+- No parsear `new Date('YYYY-MM-DD')` para mostrar día calendario.
+
+```js
+// ❌ BAD
+formatDate(new Date('2026-07-21')) // en Chile → 20-07-2026
+
+// ✅ GOOD — date-only del API
+formatDate('2026-07-21') // → 21-07-2026
+```
+
+## Mantenedores nuevos
+
+Al agregar entidad con campo fecha:
+
+1. `type: 'date'` en `entities.js` (el listado ya convierte vía `createEntityMaintainer`).
+2. Si hay filtro por día: `dateFilter: { field: '...', type: 'date' }` y UI Desde/Hasta.
+3. Columnas UI: `format: 'date'` (usa `formatDate` seguro).
+4. Verificar en Chile: fila `2026-07-21` se ve **21-07-2026**, no 20.
+
+## datetimeoffset
+
+Timestamps reales (`ts`, `completed_at`) sí usan zona; no aplicar date-only. El día de negocio se deriva con `SWITCHOFFSET` / ventana Chile, no con `getDate()` local sobre el ISO.

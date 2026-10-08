@@ -1,0 +1,14 @@
+{
+  "name": "ucm-fleet-data-platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "powershell -ExecutionPolicy Bypass -File scripts/dev/start.ps1",
+    "dev:stop": "powershell -ExecutionPolicy Bypass -File scripts/dev/stop.ps1",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build": "npm --prefix frontend run build",
+    "db:migrate": "npm --prefix backend run db:migrate",
+    "db:create": "npm --prefix backend run db:create"
+  }
+}

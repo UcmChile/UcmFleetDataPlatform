@@ -1,0 +1,582 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+@import './additional-styles/utility-patterns.css' layer(components);
+
+@plugin "@tailwindcss/forms" {
+  strategy: base;
+}
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant sidebar-expanded (&:is(.sidebar-expanded *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --font-sans: "Poppins", "sans-serif";
+
+  --shadow-sm: 0 1px 1px 0 rgb(0 0 0 / 0.05), 0 1px 2px 0 rgb(0 0 0 / 0.02);
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #bfc4cd;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #030712;
+
+  --color-violet-50: #f1eeff;
+  --color-violet-100: #e6e1ff;
+  --color-violet-200: #d2cbff;
+  --color-violet-300: #b7acff;
+  --color-violet-400: #9c8cff;
+  --color-violet-500: #8470ff;
+  --color-violet-600: #755ff8;
+  --color-violet-700: #5d47de;
+  --color-violet-800: #4634b1;
+  --color-violet-900: #2f227c;
+  --color-violet-950: #1c1357;
+
+  --color-sky-50: #e3f3ff;
+  --color-sky-100: #d1ecff;
+  --color-sky-200: #b6e1ff;
+  --color-sky-300: #a0d7ff;
+  --color-sky-400: #7bc8ff;
+  --color-sky-500: #67bfff;
+  --color-sky-600: #56b1f3;
+  --color-sky-700: #3193da;
+  --color-sky-800: #1c71ae;
+  --color-sky-900: #124d79;
+  --color-sky-950: #0b324f;
+
+  --color-green-50: #d2ffe2;
+  --color-green-100: #b1fdcd;
+  --color-green-200: #8bf0b0;
+  --color-green-300: #67e294;
+  --color-green-400: #4bd37d;
+  --color-green-500: #3ec972;
+  --color-green-600: #34bd68;
+  --color-green-700: #239f52;
+  --color-green-800: #15773a;
+  --color-green-900: #0f5429;
+  --color-green-950: #0a3f1e;
+
+  --color-red-50: #ffe8e8;
+  --color-red-100: #ffd1d1;
+  --color-red-200: #ffb2b2;
+  --color-red-300: #ff9494;
+  --color-red-400: #ff7474;
+  --color-red-500: #ff5656;
+  --color-red-600: #fa4949;
+  --color-red-700: #e63939;
+  --color-red-800: #c52727;
+  --color-red-900: #941818;
+  --color-red-950: #600f0f;
+
+  --color-yellow-50: #fff2c9;
+  --color-yellow-100: #ffe7a0;
+  --color-yellow-200: #ffe081;
+  --color-yellow-300: #ffd968;
+  --color-yellow-400: #f7cd4c;
+  --color-yellow-500: #f0bb33;
+  --color-yellow-600: #dfad2b;
+  --color-yellow-700: #bc9021;
+  --color-yellow-800: #816316;
+  --color-yellow-900: #4f3d0e;
+  --color-yellow-950: #342809;
+
+  --font-inter: "Poppins", "sans-serif";
+
+  --text-xxs: 0.625rem;
+  --text-xxs--line-height: 1.25;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5715;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --text-base--letter-spacing: -0.01em;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.5;
+  --text-lg--letter-spacing: -0.01em;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.5;
+  --text-xl--letter-spacing: -0.01em;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 1.33;
+  --text-2xl--letter-spacing: -0.01em;
+  --text-3xl: 1.88rem;
+  --text-3xl--line-height: 1.33;
+  --text-3xl--letter-spacing: -0.01em;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 1.25;
+  --text-4xl--letter-spacing: -0.02em;
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1.25;
+  --text-5xl--letter-spacing: -0.02em;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1.2;
+  --text-6xl--letter-spacing: -0.02em;
+
+  --breakpoint-xs: 480px;
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.985 0.004 247.858);
+  --foreground: oklch(0.16 0.034 264.665);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0.034 264.665);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0.034 264.665);
+  --primary: oklch(0.557 0.214 274.035);
+  --primary-foreground: oklch(0.985 0.004 247.858);
+  --secondary: oklch(0.95 0.012 260);
+  --secondary-foreground: oklch(0.23 0.04 264);
+  --muted: oklch(0.94 0.011 264);
+  --muted-foreground: oklch(0.48 0.032 264);
+  --accent: oklch(0.93 0.034 250);
+  --accent-foreground: oklch(0.25 0.06 260);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.985 0.004 247.858);
+  --border: oklch(0.9 0.013 255);
+  --input: oklch(0.92 0.012 255);
+  --ring: oklch(0.62 0.18 274);
+  --sidebar: oklch(0.99 0.003 247);
+  --sidebar-foreground: oklch(0.2 0.034 264);
+  --sidebar-primary: oklch(0.557 0.214 274.035);
+  --sidebar-accent: oklch(0.94 0.035 250);
+  --sidebar-border: oklch(0.9 0.013 255);
+  --sidebar-ring: oklch(0.62 0.18 274);
+  --chart-1: #6366f1;
+  --chart-2: #14b8a6;
+  --chart-3: #10b981;
+  --chart-4: #f59e0b;
+  --chart-5: #8b5cf6;
+}
+
+.dark {
+  --background: oklch(0.13 0.032 264);
+  --foreground: oklch(0.985 0.004 247.858);
+  --card: oklch(0.18 0.034 264);
+  --card-foreground: oklch(0.985 0.004 247.858);
+  --popover: oklch(0.18 0.034 264);
+  --popover-foreground: oklch(0.985 0.004 247.858);
+  --primary: oklch(0.68 0.19 274);
+  --primary-foreground: oklch(0.12 0.032 264);
+  --secondary: oklch(0.23 0.034 264);
+  --secondary-foreground: oklch(0.985 0.004 247.858);
+  --muted: oklch(0.24 0.026 264);
+  --muted-foreground: oklch(0.72 0.025 264);
+  --accent: oklch(0.24 0.06 260);
+  --accent-foreground: oklch(0.985 0.004 247.858);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.985 0.004 247.858);
+  --border: oklch(0.29 0.024 264);
+  --input: oklch(0.29 0.024 264);
+  --ring: oklch(0.68 0.19 274);
+  --sidebar: oklch(0.16 0.032 264);
+  --sidebar-foreground: oklch(0.96 0.006 247);
+  --sidebar-primary: oklch(0.68 0.19 274);
+  --sidebar-accent: oklch(0.24 0.06 260);
+  --sidebar-border: oklch(0.28 0.024 264);
+  --sidebar-ring: oklch(0.68 0.19 274);
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+.crm-kanban-column--active {
+  transform: translateY(-2px);
+}
+
+.crm-archive-fly-card {
+  position: relative;
+  z-index: 45;
+  overflow: hidden;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter, clip-path, border-radius;
+  animation: crm-archive-paper-plane 760ms cubic-bezier(0.2, 0.86, 0.18, 1) forwards;
+}
+
+.crm-archive-origin-hidden {
+  opacity: 0 !important;
+  transform: scale(0.96) !important;
+  pointer-events: none !important;
+}
+
+.crm-archive-flight-overlay {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter;
+  animation: crm-archive-overlay-to-button 760ms cubic-bezier(0.18, 0.88, 0.18, 1) forwards;
+}
+
+.crm-archive-flight-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  overflow: hidden;
+  border: 1px solid rgb(203 213 225 / 0.95);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, white, rgb(248 250 252));
+  box-shadow: 0 20px 55px rgb(15 23 42 / 0.22);
+  padding: 0.75rem;
+  color: rgb(15 23 42);
+  transform-origin: 50% 50%;
+  animation: crm-archive-card-to-paper 760ms cubic-bezier(0.18, 0.88, 0.18, 1) forwards;
+}
+
+.crm-archive-flight-card span {
+  width: max-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: rgb(241 245 249);
+  padding: 0.22rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: rgb(51 65 85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crm-archive-flight-card strong {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.88rem;
+  font-weight: 950;
+  line-height: 1.15;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.crm-archive-flight-card em {
+  overflow: hidden;
+  color: rgb(100 116 139);
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crm-archive-flight-plane {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(84px, 58%);
+  aspect-ratio: 1.65;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.75);
+  transform-origin: 68% 50%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 30% 52%);
+  background:
+    linear-gradient(145deg, rgb(240 249 255) 0 28%, rgb(125 211 252) 29% 48%, rgb(37 99 235) 49% 76%, rgb(29 78 216) 77% 100%),
+    linear-gradient(30deg, transparent 47%, rgb(255 255 255 / 0.55) 48% 51%, transparent 52%);
+  filter: drop-shadow(0 18px 24px rgb(37 99 235 / 0.34));
+  animation: crm-archive-plane-appears 760ms cubic-bezier(0.18, 0.88, 0.18, 1) forwards;
+}
+
+.crm-archive-flight-plane-fold {
+  position: absolute;
+  left: 20%;
+  top: 47%;
+  width: 58%;
+  height: 1px;
+  background: rgb(255 255 255 / 0.68);
+  box-shadow: 0 0 10px rgb(147 197 253 / 0.75);
+  transform: rotate(-22deg);
+  transform-origin: left center;
+}
+
+@keyframes crm-archive-overlay-to-button {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(var(--archive-fly-pre-x, 10px), var(--archive-fly-pre-y, -10px), 0) scale(1.04) rotate(var(--archive-fly-pre-rotate, -5deg));
+    filter: blur(0);
+  }
+  42% {
+    opacity: 1;
+    transform: translate3d(var(--archive-fly-mid-x, 58px), var(--archive-fly-mid-y, -58px), 0) scale(0.74) rotate(var(--archive-fly-mid-rotate, -28deg));
+    filter: blur(0.2px);
+  }
+  78% {
+    opacity: 0.52;
+    transform: translate3d(var(--archive-fly-late-x, 142px), var(--archive-fly-late-y, -124px), 0) scale(0.28) rotate(var(--archive-fly-late-rotate, -42deg));
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--archive-fly-x, 210px), var(--archive-fly-y, -164px), 0) scale(0.035) rotate(var(--archive-fly-final-rotate, -34deg));
+    filter: blur(3px);
+  }
+}
+
+@keyframes crm-archive-card-to-paper {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  24% {
+    opacity: 0.92;
+    transform: scaleX(0.92) scaleY(1.03) skewX(-3deg);
+    clip-path: polygon(5% 0, 96% 4%, 100% 94%, 0 100%);
+  }
+  40% {
+    opacity: 0.24;
+    transform: scaleX(0.56) scaleY(0.7) skewX(-12deg);
+    clip-path: polygon(0 0, 100% 50%, 0 100%, 30% 52%);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.18) scaleY(0.24) skewX(-18deg);
+    clip-path: polygon(0 0, 100% 50%, 0 100%, 38% 52%);
+  }
+}
+
+@keyframes crm-archive-plane-appears {
+  0%, 22% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.75);
+  }
+  34% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+  72% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.18);
+  }
+}
+
+.crm-archive-fly-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.92) 0 38%, rgb(226 232 240 / 0.88) 39% 57%, rgb(148 163 184 / 0.4) 58% 100%),
+    linear-gradient(28deg, transparent 48%, rgb(15 23 42 / 0.18) 49% 51%, transparent 52%);
+  opacity: 0;
+  transform-origin: 72% 50%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%, 28% 52%);
+  animation: crm-archive-paper-fold 760ms cubic-bezier(0.2, 0.86, 0.18, 1) forwards;
+}
+
+.crm-archive-fly-card::before {
+  content: "";
+  position: absolute;
+  inset: -16% -55% -16% -35%;
+  border-radius: 999px 40px 40px 999px;
+  background:
+    linear-gradient(90deg, transparent, rgb(148 163 184 / 0.16), rgb(59 130 246 / 0.18), transparent),
+    radial-gradient(circle at 70% 48%, rgb(255 255 255 / 0.7), transparent 26%);
+  filter: blur(8px);
+  opacity: 0;
+  transform: translateX(-24%) scaleX(0.35);
+  animation: crm-archive-flight-trail 760ms cubic-bezier(0.2, 0.86, 0.18, 1) forwards;
+}
+
+.crm-archive-drop-target::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 38% 50%, rgb(255 255 255 / 0.95), transparent 18%),
+    radial-gradient(circle at 48% 50%, rgb(148 163 184 / 0.32), transparent 28%);
+  opacity: 0;
+  transform: scaleX(0.4);
+  pointer-events: none;
+}
+
+.crm-archive-drop-target--active::after {
+  animation: crm-archive-intake 560ms ease-in-out infinite;
+}
+
+.crm-archive-drop-target--active .crm-archive-drop-icon {
+  animation: crm-archive-mouth 560ms ease-in-out infinite;
+}
+
+@keyframes crm-archive-paper-plane {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    border-radius: 1rem;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    filter: blur(0) saturate(1);
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(var(--archive-fly-pre-x, 10px), var(--archive-fly-pre-y, -10px), 0) scale(1.03) rotate(var(--archive-fly-pre-rotate, -5deg));
+    border-radius: 0.85rem;
+    clip-path: polygon(0 4%, 100% 0, 96% 100%, 4% 96%);
+    filter: blur(0) saturate(1.05);
+  }
+  34% {
+    opacity: 0.96;
+    transform: translate3d(var(--archive-fly-mid-x, 58px), var(--archive-fly-mid-y, -58px), 0) scale(0.74) rotate(var(--archive-fly-mid-rotate, -28deg));
+    border-radius: 0.45rem;
+    clip-path: polygon(0 0, 100% 50%, 0 100%, 30% 53%);
+    filter: blur(0.2px) saturate(1.12);
+  }
+  48% {
+    opacity: 0.82;
+    transform: translate3d(var(--archive-fly-mid-x, 58px), var(--archive-fly-mid-y, -58px), 0) scale(0.48) rotate(var(--archive-fly-mid-rotate, -28deg));
+    border-radius: 0.25rem;
+    clip-path: polygon(0 2%, 100% 50%, 0 98%, 32% 52%);
+    filter: blur(0.5px) saturate(1.16);
+  }
+  76% {
+    opacity: 0.34;
+    transform: translate3d(var(--archive-fly-late-x, 142px), var(--archive-fly-late-y, -124px), 0) scale(0.18) rotate(var(--archive-fly-late-rotate, -42deg));
+    border-radius: 0.15rem;
+    clip-path: polygon(0 5%, 100% 50%, 0 95%, 36% 52%);
+    filter: blur(1.6px) saturate(1.22);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--archive-fly-x, 210px), var(--archive-fly-y, -164px), 0) scale(0.02) rotate(var(--archive-fly-final-rotate, -34deg));
+    border-radius: 0.05rem;
+    clip-path: polygon(0 12%, 100% 50%, 0 88%, 42% 52%);
+    filter: blur(4px) saturate(1.28);
+  }
+}
+
+@keyframes crm-archive-paper-fold {
+  0%, 16% {
+    opacity: 0;
+    transform: scaleX(0.9) skewX(0deg);
+  }
+  30% {
+    opacity: 0.82;
+    transform: scaleX(1) skewX(-8deg);
+  }
+  58% {
+    opacity: 0.72;
+    transform: scaleX(0.92) skewX(-12deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.72) skewX(-18deg);
+  }
+}
+
+@keyframes crm-archive-flight-trail {
+  0% {
+    opacity: 0;
+    transform: translateX(-28%) scaleX(0.22);
+  }
+  24% {
+    opacity: 0.72;
+    transform: translateX(-18%) scaleX(0.75);
+  }
+  62% {
+    opacity: 0.38;
+    transform: translateX(8%) scaleX(1.12);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(36%) scaleX(0.4);
+  }
+}
+
+@keyframes crm-archive-intake {
+  0%, 100% {
+    opacity: 0.18;
+    transform: translateX(-8px) scaleX(0.46);
+  }
+  50% {
+    opacity: 0.52;
+    transform: translateX(4px) scaleX(1);
+  }
+}
+
+@keyframes crm-archive-mouth {
+  0%, 100% {
+    transform: translateY(-1px) rotate(-3deg) scale(1.02);
+  }
+  50% {
+    transform: translateY(-2px) rotate(2deg) scale(1.12);
+  }
+}

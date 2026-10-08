@@ -1,0 +1,203 @@
+@import '../css/style.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+:where(.flex > *, .grid > *) {
+  min-width: 0;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, span, dt, dd, label, button, a) {
+  overflow-wrap: anywhere;
+}
+
+:where(input, select, textarea, button) {
+  max-width: 100%;
+}
+
+:where(img, video, canvas, svg) {
+  max-width: 100%;
+}
+
+.crm-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--muted-foreground) 32%, transparent) transparent;
+}
+
+.crm-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.crm-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--muted-foreground) 28%, transparent);
+}
+
+.crm-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.crm-required-mark {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+.crm-required-mark__halo {
+  position: absolute;
+  inset: 1px;
+  border-radius: 999px;
+  background: color-mix(in oklch, #ef4444 24%, transparent);
+  opacity: 0.9;
+  filter: blur(2px);
+}
+
+.crm-required-mark__dot {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #dc2626;
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, #ffffff 75%, transparent),
+    0 1px 4px color-mix(in oklch, #dc2626 45%, transparent);
+}
+
+.dark .crm-required-mark__dot {
+  background: #f87171;
+  box-shadow:
+    0 0 0 1px color-mix(in oklch, #ffffff 20%, transparent),
+    0 1px 5px color-mix(in oklch, #f87171 50%, transparent);
+}
+
+.crm-required-mark__tooltip {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  z-index: 20;
+  translate: -50% 0;
+  white-space: nowrap;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
+  background: color-mix(in oklch, var(--popover) 92%, #ffffff 8%);
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--popover-foreground);
+  opacity: 0;
+  transform: translate(-50%, -2px) scale(0.96);
+  transition: opacity 140ms ease, transform 140ms ease;
+  box-shadow: 0 8px 20px color-mix(in oklch, #0f172a 14%, transparent);
+}
+
+.crm-required-mark:hover .crm-required-mark__tooltip,
+.crm-required-mark:focus-visible .crm-required-mark__tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.crm-modal-form-header {
+  border-bottom: 1px solid color-mix(in oklch, #93c5fd 28%, var(--border));
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklch, #dbeafe 92%, #ffffff) 0%,
+    color-mix(in oklch, #eff6ff 88%, #ffffff) 42%,
+    #ffffff 100%
+  );
+}
+
+.dark .crm-modal-form-header {
+  border-bottom-color: color-mix(in oklch, #1e3a8a 45%, var(--border));
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklch, #172554 88%, #030712) 0%,
+    color-mix(in oklch, #0f172a 92%, #1e3a8a 8%) 48%,
+    color-mix(in oklch, var(--card) 96%, #030712) 100%
+  );
+}
+
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .text-xxs input,
+  .text-xxs select,
+  .text-xxs textarea {
+    font-size: var(--text-xxs) !important;
+  }
+
+  .text-xs input,
+  .text-xs select,
+  .text-xs textarea {
+    font-size: var(--text-xs) !important;
+  }
+
+  button,
+  [role='button'] {
+    touch-action: manipulation;
+  }
+}
+
+.text-xxs table {
+  font-size: var(--text-xxs);
+}
+
+.text-xs table {
+  font-size: var(--text-xs);
+}
+
+select.text-xxs,
+.text-xxs select {
+  font-size: var(--text-xxs) !important;
+  line-height: var(--text-xxs--line-height, 1.25);
+}
+
+select.text-xs,
+.text-xs select {
+  font-size: var(--text-xs) !important;
+  line-height: var(--text-xs--line-height, 1.5);
+}
+
+.text-xxs th,
+.text-xxs td {
+  padding: 0.375rem 0.5rem;
+  font-size: var(--text-xxs);
+}
+
+.text-xs th,
+.text-xs td {
+  padding: 0.375rem 0.5rem;
+  font-size: var(--text-xs);
+}
+
+@keyframes crm-progress-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(420%);
+  }
+}
+
+.crm-progress-indeterminate {
+  animation: crm-progress-indeterminate 1.35s ease-in-out infinite;
+}

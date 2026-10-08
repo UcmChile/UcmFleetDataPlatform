@@ -1,0 +1,43 @@
+@keyframes ag-float-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(28px, -24px, 0) scale(1.08); }
+}
+
+@keyframes ag-float-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-30px, 22px, 0) scale(1.06); }
+}
+
+@keyframes ag-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.ag-orb-a {
+  animation: ag-float-a 18s ease-in-out infinite;
+}
+
+.ag-orb-b {
+  animation: ag-float-b 20s ease-in-out infinite;
+}
+
+.ag-aurora {
+  background: linear-gradient(110deg, rgba(99,102,241,0.22), rgba(6,182,212,0.2), rgba(16,185,129,0.14), rgba(139,92,246,0.22));
+  background-size: 280% 280%;
+  animation: ag-shimmer 22s linear infinite;
+}
+
+.ag-login-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ag-orb-a,
+  .ag-orb-b,
+  .ag-aurora {
+    animation: none;
+  }
+}
