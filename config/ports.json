@@ -2,5 +2,9 @@
   "dev": {
     "api": 4010,
     "web": 5180
+  },
+  "production": {
+    "api": 4010,
+    "publicUrl": "https://flota.ucmchile.cl"
   }
 }

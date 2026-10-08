@@ -9,6 +9,7 @@
     "db:migrate": "node src/scripts/migrate.js",
     "db:create": "node src/scripts/create-database.js",
     "wisetrack:backfill": "node src/scripts/backfill-pings-day-by-day.js",
+    "wisetrack:daily-pings": "node src/scripts/daily-wisetrack-pings.js",
     "traumasoft:sync-org": "node src/scripts/sync-traumasoft-organization.js"
   },
   "dependencies": {

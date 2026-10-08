@@ -8,7 +8,12 @@
     "dev:frontend": "npm --prefix frontend run dev",
     "dev:backend": "npm --prefix backend run dev",
     "build": "npm --prefix frontend run build",
+    "build:production": "powershell -ExecutionPolicy Bypass -File scripts/deploy/build.ps1",
+    "publish:release": "powershell -ExecutionPolicy Bypass -File scripts/deploy/publish.ps1",
+    "install:production-iis": "powershell -ExecutionPolicy Bypass -File INSTALAR_PRODUCCION_IIS.ps1",
     "db:migrate": "npm --prefix backend run db:migrate",
-    "db:create": "npm --prefix backend run db:create"
+    "db:create": "npm --prefix backend run db:create",
+    "wisetrack:daily-pings": "npm --prefix backend run wisetrack:daily-pings",
+    "wisetrack:install-daily-task": "powershell -ExecutionPolicy Bypass -File scripts/scheduled/install-daily-wisetrack-task.ps1"
   }
 }

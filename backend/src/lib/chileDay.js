@@ -29,3 +29,27 @@ export function chileDayWindow(isoDate) {
     to: `${day}T23:59:59.999${offset}`,
   }
 }
+
+/** Día civil YYYY-MM-DD en America/Santiago. */
+export function chileCalendarDate(reference = new Date()) {
+  const when = reference instanceof Date ? reference : new Date(reference)
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: CHILE_TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(when)
+}
+
+export function addCalendarDays(isoDate, days) {
+  const [y, m, d] = String(isoDate).slice(0, 10).split('-').map(Number)
+  const dt = new Date(Date.UTC(y, m - 1, d))
+  dt.setUTCDate(dt.getUTCDate() + days)
+  const pad2 = (n) => String(n).padStart(2, '0')
+  return `${dt.getUTCFullYear()}-${pad2(dt.getUTCMonth() + 1)}-${pad2(dt.getUTCDate())}`
+}
+
+/** Día civil anterior en Chile (útil para cron 01:00 → extraer ayer). */
+export function chileCalendarYesterday(reference = new Date()) {
+  return addCalendarDays(chileCalendarDate(reference), -1)
+}

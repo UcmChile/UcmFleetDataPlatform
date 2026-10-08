@@ -42,6 +42,32 @@ Basado en `Requerimientos_API_Wisetrack_UCM.docx`. Destino BD: **`ucm_fleet`** (
 - `POST /api/integrations/wisetrack/consolidate-daily` — `{ reading_date? }`
 - `GET /api/integrations/wisetrack/status`
 
+## Cron diario (01:00)
+
+Extracción automática de pings del **día civil anterior** (`America/Santiago`):
+
+1. Sincroniza vehículos Wisetrack → `dbo.vehicles`
+2. Pull paginado del día (`00:00:00`–`23:59:59` Chile) → `gps_minute_pings`
+3. Consolida `gps_daily_km` para esa fecha
+
+Manual:
+
+```bash
+npm run wisetrack:daily-pings
+# npm run wisetrack:daily-pings -- --date 2026-10-07
+```
+
+Tarea Windows (01:00 hora local del servidor):
+
+```powershell
+npm run wisetrack:install-daily-task
+# Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings
+```
+
+Log: `backend/logs/daily-wisetrack-pings.log`
+
+Requisitos: `backend/.env` con BD y `WISETRACK_ENABLED=true`; token/credenciales activas en UI.
+
 ## Flujo operativo (con token en BD)
 
 1. Token activo en Credenciales / Token (Bearer ya persistido).
