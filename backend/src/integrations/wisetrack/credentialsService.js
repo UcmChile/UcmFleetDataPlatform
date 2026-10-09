@@ -218,7 +218,16 @@ export async function obtainTokenFromApi() {
     throw new ApiError(422, 'Guarde primero las credenciales Wisetrack')
   }
 
-  const password = decryptSecret(config.password_enc)
+  let password
+  try {
+    password = decryptSecret(config.password_enc)
+  } catch (error) {
+    const hint =
+      'No se pudo descifrar password_enc (AES-GCM). Si migró la BD desde desarrollo, '
+      + 'JWT_SECRET en backend/.env debe ser el mismo con el que se guardaron las credenciales, '
+      + 'o vuelva a guardar usuario/password en Integraciones Wisetrack en este entorno.'
+    throw new ApiError(422, hint, { crypto: String(error?.message || error) })
+  }
   const url = `${String(config.base_url).replace(/\/+$/, '')}${normalizeAuthPath(config.auth_path)}`
 
   let response

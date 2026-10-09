@@ -30,6 +30,18 @@ await registerRoutes(app)
 app.use(notFound)
 app.use(errorHandler)
 
+if (isProductionEnvironment()) {
+  const dbHost = env.database.server
+  const dbName = env.database.database
+  if (dbHost === 'localhost' || dbHost === '127.0.0.1') {
+    console.error(
+      'Produccion: DB_SERVER apunta a localhost. Cree o corrija backend/.env (ej. DB_SERVER=10.1.4.5, DB_NAME=UCMFlota).',
+    )
+  } else {
+    console.log(`BD objetivo: ${dbHost}:${env.database.port}/${dbName}`)
+  }
+}
+
 try {
   await ensureSeedAdmin()
 } catch (error) {

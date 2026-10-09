@@ -25,6 +25,47 @@ npm run publish:release
 
 Salida: `release\UCMFleet\` (copiar al servidor) o `release\UCMFleet.zip`.
 
+## Prerrequisitos en el servidor (sin git)
+
+PowerShell **como administrador** (una sola vez por máquina). Incluye Node.js LTS, npm, PM2 global, rol IIS, **URL Rewrite** y **ARR** (proxy).
+
+```powershell
+# Desde la carpeta extraida UCMFleet (o el repo en dev)
+PowerShell -ExecutionPolicy Bypass -File .\scripts\deploy\install-server-prerequisites.ps1
+```
+
+Requisitos del script:
+
+| Componente | Cómo lo instala |
+|------------|------------------|
+| Node.js LTS + npm | `winget` (`OpenJS.NodeJS.LTS`) o `choco install nodejs-lts` |
+| PM2 | `npm install -g pm2` |
+| IIS | `Install-WindowsFeature Web-Server` (Server) |
+| URL Rewrite | `choco install urlrewrite` (si Chocolatey está instalado) |
+| ARR | `choco install iis-arr` |
+| Proxy ARR | `Set-WebConfigurationProperty ... proxy enabled=true` |
+
+Si **no** hay `winget` ni **Chocolatey**, instale manualmente:
+
+- Node LTS: https://nodejs.org/
+- URL Rewrite: https://www.iis.net/downloads/microsoft/url-rewrite
+- ARR: https://www.iis.net/downloads/microsoft/application-request-routing
+
+Luego vuelva a ejecutar el script con `-SkipNode` (o solo la parte que falte).
+
+Opcional — PM2 al arranque del servidor:
+
+```powershell
+.\scripts\deploy\install-server-prerequisites.ps1 -InstallPm2Startup
+pm2 save
+```
+
+En muchos servidores UCM, IIS + Rewrite + ARR **ya están** por otras apps (SENN, SSO, etc.). En ese caso:
+
+```powershell
+.\scripts\deploy\install-server-prerequisites.ps1 -SkipIis -SkipUrlRewrite -SkipArr
+```
+
 ## En el servidor Windows
 
 1. Copiar `release\UCMFleet` → `C:\inetpub\Apps\UCMFleet`
@@ -56,6 +97,41 @@ Push-Location backend; npm ci --omit=dev; Pop-Location
 pm2 startOrReload pm2.config.cjs --only UCMFleet-Backend --update-env
 Restart-WebAppPool -Name UCMFleet-AppPool
 ```
+
+## Error: `Failed to connect to localhost:1433`
+
+Significa que el backend **no está leyendo** `DB_SERVER=10.1.4.5` y cae al default `localhost`.
+
+1. El archivo debe existir en **`C:\inetpub\Apps\UCMFleet\backend\.env`** (no en la raíz del sitio ni solo `.env.example`).
+2. Contenido mínimo de BD:
+
+```env
+DB_SERVER=10.1.4.5
+DB_PORT=1433
+DB_NAME=UCMFlota
+DB_USER=ucmflota
+DB_PASSWORD=<clave real>
+DB_ENCRYPT=true
+DB_TRUST_SERVER_CERTIFICATE=true
+```
+
+3. Recargar PM2 (PM2 no relee `.env` solo con restart si el proceso ya estaba en memoria):
+
+```powershell
+cd C:\inetpub\Apps\UCMFleet
+pm2 startOrReload pm2.config.cjs --only UCMFleet-Backend --update-env
+pm2 logs UCMFleet-Backend --lines 30
+```
+
+En el log debe aparecer `BD objetivo: 10.1.4.5:1433/UCMFlota`.
+
+4. Red desde el **servidor IIS** (no desde tu PC):
+
+```powershell
+Test-NetConnection -ComputerName 10.1.4.5 -Port 1433
+```
+
+Si `TcpTestSucceeded : False`, abrir firewall/SQL en `10.1.4.5` para la IP del servidor web.
 
 ## Verificación
 

@@ -11,6 +11,7 @@
     "build:production": "powershell -ExecutionPolicy Bypass -File scripts/deploy/build.ps1",
     "publish:release": "powershell -ExecutionPolicy Bypass -File scripts/deploy/publish.ps1",
     "install:production-iis": "powershell -ExecutionPolicy Bypass -File INSTALAR_PRODUCCION_IIS.ps1",
+    "install:server-prerequisites": "powershell -ExecutionPolicy Bypass -File scripts/deploy/install-server-prerequisites.ps1",
     "db:migrate": "npm --prefix backend run db:migrate",
     "db:create": "npm --prefix backend run db:create",
     "wisetrack:daily-pings": "npm --prefix backend run wisetrack:daily-pings",

@@ -84,5 +84,19 @@ WISETRACK_BASE_URL=https://api-gateway.wisetrack.cl/prod
 WISETRACK_AUTH_PATH=/ucm/v1/auth/getToken
 ```
 
+## Error: `Unsupported state or unable to authenticate data`
+
+Al hacer **Pull vehicles** o **Obtener token**, la API descifra `wisetrack_api_config.password_enc` con **AES-GCM** y clave derivada de **`JWT_SECRET`** (`backend/.env`).
+
+Si migró datos desde desarrollo y en producción puso otro `JWT_SECRET`, el descifrado falla con ese mensaje.
+
+**Solución A (rápida):** en `backend/.env` de producción use el mismo `JWT_SECRET` que en desarrollo (el que tenía cuando guardó las credenciales en UI), reinicie PM2, pruebe de nuevo.
+
+**Solución B (recomendada):** deje un `JWT_SECRET` fuerte propio de producción, entre en **Integraciones → Credenciales Wisetrack**, vuelva a ingresar **usuario y password**, guarde y pulse **Obtener token**. Eso re-cifra la password con el `JWT_SECRET` actual.
+
+```powershell
+pm2 startOrReload pm2.config.cjs --only UCMFleet-Backend --update-env
+```
+
 Las credenciales `username`/`password` se administran en UI:
 `/fleet/integraciones/wisetrack/credenciales`
