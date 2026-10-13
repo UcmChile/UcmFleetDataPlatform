@@ -7,4 +7,5 @@ uploads/
 .env.staging
 .env.production
 *.log
+scripts/scheduled/node.exe.path
 .DS_Store

@@ -5,7 +5,8 @@ param(
   [int]$SitePort = 5185,
   [int]$BackendPort = 4010,
   [string]$PublicSiteUrl = 'https://flota.ucmchile.cl',
-  [string]$PublicHostHeader = 'flota.ucmchile.cl'
+  [string]$PublicHostHeader = 'flota.ucmchile.cl',
+  [switch]$SkipWisetrackCron
 )
 
 $ErrorActionPreference = 'Stop'
@@ -126,6 +127,23 @@ try {
 
 pm2 status
 
+if (-not $SkipWisetrackCron) {
+  Write-Info '12) Cron Wisetrack (tarea Windows 01:00, día anterior Chile)'
+  $CronInstaller = Join-Path $AppPath 'scripts\scheduled\install-daily-wisetrack-task.ps1'
+  if (Test-Path $CronInstaller) {
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $CronInstaller -AppRoot $AppPath -At '01:00'
+    if ($LASTEXITCODE -ne 0) {
+      Write-Warn 'No se pudo registrar UCMFleet_WisetrackDailyPings. Ejecute manualmente: npm run wisetrack:install-daily-task'
+    } else {
+      Write-Ok 'Tarea UCMFleet_WisetrackDailyPings registrada (SYSTEM, 01:00)'
+    }
+  } else {
+    Write-Warn "Falta $CronInstaller — copie scripts\scheduled del release."
+  }
+} else {
+  Write-Warn 'Cron Wisetrack omitido (-SkipWisetrackCron)'
+}
+
 Write-Ok 'Instalacion productiva terminada'
 Write-Host ''
 Write-Host "URL publica:  $PublicSiteUrl" -ForegroundColor Green
@@ -136,3 +154,5 @@ Write-Warn "IIS: binding HTTPS host header $PublicHostHeader -> dist\frontend (c
 Write-Warn "backend\.env: CORS_ORIGIN=$PublicSiteUrl"
 Write-Warn "UCMSSO: SSO_TRUSTED_REDIRECT_ORIGINS += $PublicSiteUrl"
 Write-Warn 'UCMSSO Applications: URL satelite = ' + $PublicSiteUrl + ' ; connection_string -> UCMFlota en 10.1.4.5'
+Write-Warn 'Cron Wisetrack: backend\logs\daily-wisetrack-pings.log — estado: scripts\scheduled\status-daily-wisetrack-task.ps1'
+Write-Warn 'Probar ingesta: Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings'

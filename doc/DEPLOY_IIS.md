@@ -78,12 +78,42 @@ cd C:\inetpub\Apps\UCMFleet
 .\INSTALAR_PRODUCCION_IIS.ps1
 ```
 
-5. Cron Wisetrack (01:00, día anterior Chile):
+5. Cron Wisetrack: el paso **12** de `INSTALAR_PRODUCCION_IIS.ps1` registra la tarea `UCMFleet_WisetrackDailyPings` (01:00, cuenta **SYSTEM**, día anterior Chile). Si el servidor ya estaba instalado antes de ese paso, ejecute una vez:
 
 ```powershell
 cd C:\inetpub\Apps\UCMFleet
 npm run wisetrack:install-daily-task
+# Diagnóstico:
+powershell -ExecutionPolicy Bypass -File scripts\scheduled\status-daily-wisetrack-task.ps1
+Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings
 ```
+
+Requisitos: `backend\.env` con `WISETRACK_ENABLED=true` y token/credenciales Wisetrack activas en la UI.
+
+### Actualizar solo scripts del cron (servidor sin Git)
+
+En la PC de desarrollo:
+
+```powershell
+cd C:\ReposNodejs\UCMFleetDataPlatform
+npm run pack:wisetrack-cron
+```
+
+Copie `release\UCMFleet-wisetrack-cron-patch.zip` al servidor (RDP, carpeta compartida, etc.) y en el servidor:
+
+```powershell
+cd C:\inetpub\Apps\UCMFleet
+Expand-Archive -Path C:\ruta\UCMFleet-wisetrack-cron-patch.zip -DestinationPath C:\inetpub\Apps\UCMFleet -Force
+npm run wisetrack:install-daily-task
+npm run wisetrack:cron-status
+Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings
+```
+
+Archivos incluidos: `package.json`, `scripts\scheduled\*.ps1`, `backend\src\config\env.js`, `backend\src\scripts\daily-wisetrack-pings.js`.
+
+**Log del cron:** `backend\logs\daily-wisetrack-pings.log` (no confundir con `logs\error.log` de PM2). El aviso `DEP0123` en PM2 es solo advertencia TLS al conectar por IP a SQL; no indica fallo del cron por si solo.
+
+Alternativa manual: copie esos cuatro archivos manteniendo la misma ruta relativa bajo `C:\inetpub\Apps\UCMFleet`.
 
 ## Actualizar versión
 

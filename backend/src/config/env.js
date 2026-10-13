@@ -1,13 +1,25 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import 'dotenv/config'
+import dotenv from 'dotenv'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const backendRoot = path.resolve(__dirname, '../..')
+dotenv.config({ path: path.join(backendRoot, '.env') })
 
 const toBoolean = (value, fallback = false) => {
   if (value === undefined || value === null || value === '') return fallback
   return ['true', '1', 'yes', 'y'].includes(String(value).toLowerCase())
+}
+
+/** Evita DEP0123 cuando DB_SERVER es IP y DB_ENCRYPT=true (SNI no puede ser dirección IP). */
+function resolveDbTlsServerName(server) {
+  const explicit = String(process.env.DB_TLS_SERVER_NAME || '').trim()
+  if (explicit) return explicit
+  const host = String(server || '').trim()
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(host)) {
+    return 'ucm-fleet-mssql'
+  }
+  return undefined
 }
 
 const localhostOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i
@@ -53,10 +65,13 @@ export const env = {
     clientSecret: process.env.WISETRACK_CLIENT_SECRET || '',
     apiKey: process.env.WISETRACK_API_KEY || '',
   },
-  database: {
+  database: (() => {
+    const server = process.env.DB_SERVER || 'localhost'
+    const tlsServerName = resolveDbTlsServerName(server)
+    return {
     user: process.env.DB_USER || 'app_user',
     password: process.env.DB_PASSWORD || '123456',
-    server: process.env.DB_SERVER || 'localhost',
+    server,
     port: Number(process.env.DB_PORT || 1433),
     database: process.env.DB_NAME || 'ucm_fleet',
     pool: {
@@ -70,6 +85,8 @@ export const env = {
       encrypt: toBoolean(process.env.DB_ENCRYPT, false),
       trustServerCertificate: toBoolean(process.env.DB_TRUST_SERVER_CERTIFICATE, true),
       enableArithAbort: true,
+      ...(tlsServerName ? { serverName: tlsServerName } : {}),
     },
-  },
+  }
+  })(),
 }

@@ -57,11 +57,12 @@ npm run wisetrack:daily-pings
 # npm run wisetrack:daily-pings -- --date 2026-10-07
 ```
 
-Tarea Windows (01:00 hora local del servidor):
+Tarea Windows (01:00 hora local del servidor). **No** forma parte del proceso PM2; debe registrarse en el servidor (paso 12 de `INSTALAR_PRODUCCION_IIS.ps1` o manual):
 
 ```powershell
 npm run wisetrack:install-daily-task
-# Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings
+npm run wisetrack:cron-status
+Start-ScheduledTask -TaskName UCMFleet_WisetrackDailyPings
 ```
 
 Log: `backend/logs/daily-wisetrack-pings.log`
